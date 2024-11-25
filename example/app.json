@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "expo-kakao-example",
+    "slug": "expo-kakao-example",
+    "scheme": "expo-kakao",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "expo.modules.kakao.example"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "expo.modules.kakao.example"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": [ "https://devrepo.kakao.com/nexus/content/groups/public/" ],
+            "minSdkVerson": 26
+          }
+        }
+      ],
+      [
+        "../app.plugin.js",
+        {
+          "nativeAppKey": "89baf734b7c006ae5fad42c60226844d",
+          "android": {
+            "authCodeHandlerActivity": true
+          },
+          "ios": {
+            "handleKakaoOpenUrl": true
+          }
+        }
+      ],
+      "expo-router"
+    ]
+  }
+}

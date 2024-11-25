@@ -1,0 +1,20 @@
+{
+  "platforms": [
+    "apple",
+    "android",
+    "web"
+  ],
+  "apple": {
+    "appDelegateSubscribers": [
+      "ExpoKakaoDelegate"
+    ],
+    "modules": [
+      "ExpoKakaoModule"
+    ]
+  },
+  "android": {
+    "modules": [
+      "expo.modules.kakao.ExpoKakaoModule"
+    ]
+  }
+}
