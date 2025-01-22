@@ -1,5 +1,5 @@
-import { TKakaoService } from ".";
-import { TKakaoLoginToken } from "./ExpoKakao.types";
+import { NativeModule, registerWebModule } from "expo";
+
 import { camelCaseObject } from "./util/camelCaseObject";
 import { filterNonNullishKeys } from "./util/filterNonNullishKeys";
 import { kAssert } from "./util/kAssert";
@@ -36,11 +36,8 @@ function isoToUnix(value?: string | number): number | undefined {
   return undefined;
 }
 
-const KakaoService: TKakaoService = {
-  getKeyHashAndroid: async () => {
-    return undefined;
-  },
-  initializeKakaoSDK: async (_appKey: string, options) => {
+class ExpoKakaoModule extends NativeModule {
+  async initializeKakaoSDK(_appKey: string, options) {
     kAssert(
       options?.web?.javascriptKey,
       "[initializeKakaoSDK] javascriptKey is missing",
@@ -60,8 +57,9 @@ const KakaoService: TKakaoService = {
 
       kAssert(Kakao.isInitialized(), "Kakao.isInitialized returns false");
     });
-  },
-  issueAccessTokenWithCodeWeb: ({ clientSecret, code, redirectUri }) =>
+  }
+
+  issueAccessTokenWithCodeWeb({ clientSecret, code, redirectUri }) {
     kRunWebAPI(async () => {
       const res = await kFetchFormUrlEncoded<{
         token_type: string;
@@ -83,16 +81,19 @@ const KakaoService: TKakaoService = {
       }).then((r) => r.body);
 
       return camelCaseObject(res) as any;
-    }),
-  setAccessTokenWeb: (token: string) => {
+    });
+  }
+
+  setAccessTokenWeb(token: string) {
     kGlobalStorage.accessToken = token;
 
     return new Promise((r) => {
       Kakao.Auth.setAccessToken(token);
       r(42);
     });
-  },
-  login: (params): Promise<TKakaoLoginToken> =>
+  }
+
+  login(params) {
     kRunWebAPI(() => {
       const {
         loginHint,
@@ -117,9 +118,14 @@ const KakaoService: TKakaoService = {
           throughTalk,
         }),
       );
-    }),
-  isKakaoTalkLoginAvailable: async () => false,
-  me: () =>
+    });
+  }
+
+  isKakaoTalkLoginAvailable() {
+    return false;
+  }
+
+  me() {
     kRunWebAPI(async () => {
       const ret = camelCaseObject(
         await Kakao.API.request({ url: "/v2/user/me" }),
@@ -130,16 +136,8 @@ const KakaoService: TKakaoService = {
         connectedAt: isoToUnix(ret.connectedAt),
         synchedAt: isoToUnix(ret.synchedAt),
       };
-    }),
-};
+    });
+  }
+}
 
-export const {
-  initializeKakaoSDK,
-  isKakaoTalkLoginAvailable,
-  login,
-  me,
-  setAccessTokenWeb,
-  issueAccessTokenWithCodeWeb,
-} = KakaoService;
-
-export default KakaoService;
+export default registerWebModule(ExpoKakaoModule);

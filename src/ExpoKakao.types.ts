@@ -18,7 +18,7 @@ export type ExpoKakaoViewProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export type TKakaoUser = {
+export type KakaoUser = {
   id: number;
   email: string;
   name: string;
@@ -51,7 +51,7 @@ export type TKakaoUser = {
   synchedAt?: number;
 };
 
-export type TKakaoLoginToken = {
+export type KakaoLoginToken = {
   accessToken: string;
   refreshToken: string;
   tokenType?: string;
@@ -61,4 +61,11 @@ export type TKakaoLoginToken = {
   accessTokenExpiresIn: number;
   refreshTokenExpiresIn: number;
   scopes: string[];
+};
+
+export type KakaoSDKOptions = {
+  web?: {
+    javascriptKey: string;
+    restApiKey: string;
+  };
 };
