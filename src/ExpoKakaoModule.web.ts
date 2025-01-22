@@ -60,7 +60,7 @@ class ExpoKakaoModule extends NativeModule {
   }
 
   issueAccessTokenWithCodeWeb({ clientSecret, code, redirectUri }) {
-    kRunWebAPI(async () => {
+    return kRunWebAPI(async () => {
       const res = await kFetchFormUrlEncoded<{
         token_type: string;
         access_token: string;
@@ -80,7 +80,7 @@ class ExpoKakaoModule extends NativeModule {
         }),
       }).then((r) => r.body);
 
-      return camelCaseObject(res) as any;
+      return camelCaseObject(res);
     });
   }
 
@@ -93,8 +93,19 @@ class ExpoKakaoModule extends NativeModule {
     });
   }
 
-  login(params) {
-    kRunWebAPI(() => {
+  login(params: {
+    web?: {
+      redirectUri: string;
+      scope?: string[];
+      throughTalk?: boolean;
+      prompt?: ("login" | "none" | "create" | "select_account")[];
+      loginHint?: string;
+      serviceTerms?: string[];
+      state?: string;
+      nonce?: string;
+    };
+  }) {
+    return kRunWebAPI(() => {
       const {
         loginHint,
         nonce,
@@ -126,7 +137,7 @@ class ExpoKakaoModule extends NativeModule {
   }
 
   me() {
-    kRunWebAPI(async () => {
+    return kRunWebAPI(async () => {
       const ret = camelCaseObject(
         await Kakao.API.request({ url: "/v2/user/me" }),
       ) as any;

@@ -13,7 +13,7 @@ export default function RootLayout() {
     const go = async () => {
       const { accessToken } = await ExpoKakao.issueAccessTokenWithCodeWeb({
         code: code!,
-        redirectUri: "http://localhost:8081",
+        redirectUri: "http://localhost:8082",
         clientSecret: "Hf0jmPY5GTCUGhLyNEf9ghikKdsNU6y8",
       });
 

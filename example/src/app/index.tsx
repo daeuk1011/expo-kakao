@@ -45,7 +45,7 @@ export default function Page() {
           ExpoKakao.login({
             // useKakaoAccountLogin: true,
             web: {
-              redirectUri: "http://localhost:8081",
+              redirectUri: "http://localhost:8082",
               prompt: ["select_account"],
             },
           })

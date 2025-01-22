@@ -25,7 +25,7 @@ export default function Page() {
         onPress={() => {
           ExpoKakao.login({
             web: {
-              redirectUri: "http://localhost:8081",
+              redirectUri: "http://localhost:8082",
               prompt: ["select_account"],
             },
           })
