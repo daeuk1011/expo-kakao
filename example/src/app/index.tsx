@@ -1,4 +1,4 @@
-import { login } from "expo-kakao";
+import ExpoKakao from "expo-kakao";
 import { router } from "expo-router";
 import { useRef } from "react";
 import { Animated, Easing, Pressable, ScrollView, Text } from "react-native";
@@ -42,20 +42,18 @@ export default function Page() {
 
       <Pressable
         onPress={() => {
-          login({
+          ExpoKakao.login({
             // useKakaoAccountLogin: true,
             web: {
               redirectUri: "http://localhost:8081",
               prompt: ["select_account"],
             },
           })
-            .then((response) => {
+            .then((response: any) => {
               console.log(1234124, response);
               // alert("Login Success");
             })
-            .catch((e) => {
-              console.log(require("").NativeModules);
-
+            .catch((e: any) => {
               console.log("로그인 에러:");
               console.dir(e);
             });

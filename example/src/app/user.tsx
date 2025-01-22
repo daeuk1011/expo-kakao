@@ -1,4 +1,4 @@
-import { isKakaoTalkLoginAvailable, login, me } from "expo-kakao";
+import ExpoKakao from "expo-kakao";
 import { useState } from "react";
 import { Pressable, ScrollView, Text } from "react-native";
 
@@ -13,7 +13,7 @@ export default function Page() {
   const [meResult, setMeResult] = useState<object>();
 
   useMount(() => {
-    isKakaoTalkLoginAvailable().then(setKakaoTalkEnable);
+    ExpoKakao.isKakaoTalkLoginAvailable().then(setKakaoTalkEnable);
   });
 
   return (
@@ -23,17 +23,17 @@ export default function Page() {
       >{`Kakao Talk Available: ${isKakaoTalkEnable}`}</Text>
       <Pressable
         onPress={() => {
-          login({
+          ExpoKakao.login({
             web: {
               redirectUri: "http://localhost:8081",
               prompt: ["select_account"],
             },
           })
-            .then((ret) => {
+            .then((ret: any) => {
               alert("Login Success");
               setResult(ret);
             })
-            .catch((e) => alert(e.message));
+            .catch((e: any) => alert(e.message));
         }}
       >
         <Text style={{ color: "white", fontSize: 100 }}>로그인</Text>
@@ -41,14 +41,14 @@ export default function Page() {
 
       <Pressable
         onPress={() => {
-          me()
-            .then((ret) => {
+          ExpoKakao.me()
+            .then((ret: any) => {
               alert("Get profile Success");
 
               console.log(ret);
               setMeResult(ret);
             })
-            .catch((e) => {
+            .catch((e: any) => {
               alert(e.message);
             });
         }}

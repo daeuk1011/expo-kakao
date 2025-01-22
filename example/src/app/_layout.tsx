@@ -1,8 +1,4 @@
-import {
-  issueAccessTokenWithCodeWeb,
-  setAccessTokenWeb,
-  initializeKakaoSDK,
-} from "expo-kakao";
+import ExpoKakao from "expo-kakao";
 import { Stack, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
@@ -15,13 +11,13 @@ export default function RootLayout() {
   const accessTokenIssued = useRef(false);
   useEffect(() => {
     const go = async () => {
-      const { accessToken } = await issueAccessTokenWithCodeWeb({
+      const { accessToken } = await ExpoKakao.issueAccessTokenWithCodeWeb({
         code: code!,
         redirectUri: "http://localhost:8081",
         clientSecret: "Hf0jmPY5GTCUGhLyNEf9ghikKdsNU6y8",
       });
 
-      setAccessTokenWeb(accessToken);
+      ExpoKakao.setAccessTokenWeb(accessToken);
       accessTokenIssued.current = true;
     };
 
@@ -31,7 +27,7 @@ export default function RootLayout() {
   }, [code]);
 
   useMount(() => {
-    initializeKakaoSDK("89baf734b7c006ae5fad42c60226844d", {
+    ExpoKakao.initializeKakaoSDK("89baf734b7c006ae5fad42c60226844d", {
       web: {
         javascriptKey: "7e556fcfd7bd60ec1a36f9f814c6d9ce",
         restApiKey: "1909677e56e89d2351b73fc14c2223a0",
