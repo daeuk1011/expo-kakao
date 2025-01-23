@@ -25,7 +25,7 @@ class ExpoKakaoModule : Module() {
             "PI" to Math.PI
         )
 
-        Function("initializeKakaoSDK") { appKey: String ->
+        Function("initializeKakaoSDK") { appKey: String, options: Map<String, Any?> ->
             val context = getValidContext()
             KakaoSdk.init(context, appKey)
             println("Kakao SDK initialized with appKey: $appKey")
@@ -41,11 +41,14 @@ class ExpoKakaoModule : Module() {
             Utility.getKeyHash(context)
         }
 
-        AsyncFunction("login") { serviceTerms: List<String>?,
-                                 prompts: List<String>?,
-                                 useKakaoAccountLogin: Boolean,
-                                 scopes: List<String>?,
-                                 promise: Promise ->
+        AsyncFunction("login") { 
+            options: Map<String, Any?>,
+            promise: Promise ->
+
+            val serviceTerms = options["serviceTerms"] as? List<String>
+            val prompts = options["prompts"] as? List<String>
+            val useKakaoAccountLogin = options["useKakaoAccountLogin"] as? Boolean ?: false
+            val scopes = options["scopes"] as? List<String>
 
             val context = appContext.currentActivity
                 ?: run {

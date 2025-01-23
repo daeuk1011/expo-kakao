@@ -15,6 +15,9 @@ public class ExpoKakaoModule: Module {
       "PI": Double.pi
     ])
 
+    AsyncFunction("initializeKakaoSDK") { (appKey: String, options: [String: Any]?) -> Void in
+    }
+
     Function("isKakaoTalkLoginUrl") { (url: String) -> Bool in
       guard let urlObj = URL(string: url),
             let _ = try? KakaoSDK.shared.appKey() else { return false }
@@ -31,12 +34,13 @@ public class ExpoKakaoModule: Module {
       return UserApi.isKakaoTalkLoginAvailable()
     }
 
-    AsyncFunction("login") { (
-      serviceTerms: [String],
-      prompts: [String],
-      useKakaoAccountLogin: Bool,
-      scopes: [String]
-    ) -> [String: Any] in
+    AsyncFunction("login") { (options: [String: Any]) -> [String: Any] in
+      // 옵션을 파싱하여 타입에 맞게 변환
+      let serviceTerms = options["serviceTerms"] as? [String] ?? []
+      let prompts = options["prompts"] as? [String]
+      let useKakaoAccountLogin = options["useKakaoAccountLogin"] as? Bool ?? false
+      let scopes = options["scopes"] as? [String] ?? []
+
       return try await withCheckedThrowingContinuation { continuation in
         let callback: (OAuthToken?, Error?) -> Void = { token, error in
           if let error = error {
@@ -48,14 +52,19 @@ public class ExpoKakaoModule: Module {
           }
         }
 
+        // scopes가 비어있지 않은 경우
         if !scopes.isEmpty {
           UserApi.shared.loginWithKakaoAccount(scopes: scopes, completion: callback)
-        } else if UserApi.isKakaoTalkLoginAvailable(), !useKakaoAccountLogin {
+        } 
+        // 카카오톡 앱을 통한 로그인 가능하고, useKakaoAccountLogin이 false인 경우
+        else if UserApi.isKakaoTalkLoginAvailable(), !useKakaoAccountLogin {
           UserApi.shared.loginWithKakaoTalk(
             serviceTerms: self.emptyArrayToNil(serviceTerms),
             completion: callback
           )
-        } else {
+        } 
+        // 기본 카카오 계정 로그인을 사용하는 경우
+        else {
           UserApi.shared.loginWithKakaoAccount(
             prompts: self.convertPrompts(prompts),
             serviceTerms: self.emptyArrayToNil(serviceTerms),
@@ -86,18 +95,18 @@ public class ExpoKakaoModule: Module {
     return (arr?.isEmpty == true) ? nil : arr
   }
 
-  private func convertPrompts(_ prompts: [String]) -> [Prompt] {
-    return prompts.compactMap { prompt in
-      switch prompt {
-      case "Login": return .Login
-      case "Cert": return .Cert
-      case "Create": return .Create
-      case "UnifyDaum": return .UnifyDaum
-      default: return nil
-      }
-    }
-  }
-
+  private func convertPrompts(_ prompts: [String]?) -> [Prompt] {
+    return prompts?.compactMap { prompt in
+        switch prompt {
+        case "Login": return .Login
+        case "Cert": return .Cert
+        case "Create": return .Create
+        case "UnifyDaum": return .UnifyDaum
+        case "SelectAccount": return .SelectAccount
+        default: return nil
+        }
+    } ?? []
+}
   private func tokenToDictionary(_ token: OAuthToken) -> [String: Any] {
     return [
       "accessToken": token.accessToken,

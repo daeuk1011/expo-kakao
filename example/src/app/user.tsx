@@ -12,9 +12,9 @@ export default function Page() {
   const [shippingResult, setShippingResult] = useState<object>();
   const [meResult, setMeResult] = useState<object>();
 
-  useMount(() => {
-    ExpoKakao.isKakaoTalkLoginAvailable().then(setKakaoTalkEnable);
-  });
+  // useMount(() => {
+  //   ExpoKakao.isKakaoTalkLoginAvailable().then(setKakaoTalkEnable);
+  // });
 
   return (
     <ScrollView style={{ flex: 1 }}>

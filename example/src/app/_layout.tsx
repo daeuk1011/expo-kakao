@@ -2,6 +2,7 @@ import ExpoKakao from "expo-kakao";
 import { Stack, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
+import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useMount } from "../hooks/useMount";

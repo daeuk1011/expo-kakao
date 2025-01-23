@@ -26,13 +26,7 @@ declare class ExpoKakaoModule extends NativeModule {
   isKakaoTalkLoginUrl(url: string): Promise<boolean>;
   handleOpenUrl(url: string): Promise<boolean>;
   isKakaoTalkLoginAvailable(): Promise<boolean>;
-  login({
-    serviceTerms,
-    prompts,
-    useKakaoAccountLogin,
-    scopes,
-    web,
-  }: {
+  login(options: {
     serviceTerms?: string[];
     prompts?: ("Login" | "Create" | "Cert" | "UnifyDaum" | "SelectAccount")[];
     scopes?: string[];

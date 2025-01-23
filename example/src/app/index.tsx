@@ -43,7 +43,6 @@ export default function Page() {
       <Pressable
         onPress={() => {
           ExpoKakao.login({
-            // useKakaoAccountLogin: true,
             web: {
               redirectUri: "http://localhost:8082",
               prompt: ["select_account"],
@@ -54,7 +53,7 @@ export default function Page() {
               // alert("Login Success");
             })
             .catch((e: any) => {
-              console.log("로그인 에러:");
+              console.log("로그인 에러:", e);
               console.dir(e);
             });
         }}

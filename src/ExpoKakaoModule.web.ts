@@ -93,7 +93,7 @@ class ExpoKakaoModule extends NativeModule {
     });
   }
 
-  login(params: {
+  login(options: {
     web?: {
       redirectUri: string;
       scope?: string[];
@@ -115,7 +115,7 @@ class ExpoKakaoModule extends NativeModule {
         state,
         throughTalk,
         serviceTerms,
-      } = params?.web ?? {};
+      } = options?.web ?? {};
 
       return Kakao.Auth.authorize(
         filterNonNullishKeys({
